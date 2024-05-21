@@ -23,15 +23,16 @@ class Employee(Person):
         self.child_edu_allowances = []
         self.sponsored_edu_expenses = []
 
+    #for checking if the user have children or not to calculate education allowance
         if marital_status.lower() == "married":
-            self.num_children = self.get_num_children()
+            self.num_children = self.get_num_children() 
             if self.num_children > 0:
-                self.child_edu_allowances = self.get_child_education_allowances()
+                self.child_edu_allowances = self.get_child_education_allowances()   
                 self.sponsored_edu_expenses = self.get_sponsored_education_expenses()
 
     def get_num_children(self):
         while True:
-            try:
+            try:# for calculating education alllowance for children
                 num_children_input = input("Do you have children? (yes/no): ")
                 if num_children_input.lower() == "yes":
                     return int(input("Enter the number of your children: "))
@@ -46,7 +47,7 @@ class Employee(Person):
         allowances = []
         for child in range(self.num_children):
             while True:
-                try:
+                try: #Education allowance up to a max of Nu. 350,000 per child.
                     allowance = float(input(f"Enter education allowance for child {child + 1} (max Nu. 350,000): "))
                     allowances.append(min(allowance, 350000))
                     break
@@ -58,7 +59,7 @@ class Employee(Person):
         expenses = []
         for child in range(self.num_children):
             while True:
-                goes_to_school = input(f"Does your child {child + 1} go to school? (y/n): ").lower()
+                goes_to_school = input(f"Does your child {child + 1} go to school? (y/n): ").lower()  # calaculating education allowance f0r each children
                 if goes_to_school in ['y', 'n']:
                     break
                 print("There is no such option,  check the spelling and retype it again.")
@@ -67,7 +68,7 @@ class Employee(Person):
                 while True:
                     try:
                         expense = float(input(f"Enter your sponsored education expense for your child {child + 1} (max Nu. 350,000): "))
-                        expenses.append(min(expense, 350000))
+                        expenses.append(min(expense, 350000)) #Sponsored children education expense up to max of Nu. 350,000 per child.
                         break
                     except ValueError:
                         print(" Please enter a valid number.")
@@ -85,7 +86,7 @@ class TaxCalculator:
         total_income -= self.employee.gis_contributions
         total_income -= self.employee.pension_contributions
 
-        rental_income = self.employee.rental_income * 0.8  # 20% deduction on repairs and maintenance, etc.
+        rental_income = self.employee.rental_income * 0.8  # 20% deduction on repairs and maintenance.
         total_income += rental_income
 
         # 10 %  of TDS
@@ -113,8 +114,7 @@ class TaxCalculator:
 
         total_income -= donations
         total_income -= sum(self.employee.sponsored_edu_expenses)
-        total_income -= self.employee.bonus_amount
-
+        total_income -= self.employee.bonus_amount  
         return self.apply_tax_slabs(total_income)
 
     def apply_tax_slabs(self, total_income):
@@ -197,7 +197,8 @@ def main():
         calculator = TaxCalculator(employee)
         tax_amount = calculator.calculate_tax()
         print(f"{employee.name}'s tax amount is: {tax_amount}")
-
+        
+        #making the code again if the user wants if not exit
         run_again = input("Would you like to calculate tax again? (yes/no): ").lower()
         if run_again!= "yes":
             break
